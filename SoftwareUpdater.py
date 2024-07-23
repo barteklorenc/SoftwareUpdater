@@ -11,9 +11,7 @@ import webbrowser
 import threading
 
 VERSION = '1.1'
-
 CHECK_NEW_VERSION_URL = 'https://api.github.com/repos/bartekl1/SoftwareUpdater/releases/latest'
-
 
 polish_text = [
     'Przygotowywanie...',
@@ -25,11 +23,11 @@ polish_text = [
     'Dostępna nowa wersja.',
     'Nie można sprawdzić dostępności nowej wersji.',
     'Nie uruchomiono programu jako administrator.',
-    'Winget nie jest dostępny',
+    'winget nie jest dostępny',
     'Pobierz',
     'Uruchom jako administrator',
     'Dalej',
-    'Sprawdzanie dostępnych aktualizacji...',
+    'Sprawdzanie dostępności aktualizacji...',
     'Dostępne aktualizacje',
     'Instalowanie aktualizacji...',
     'Zakończono',
@@ -115,7 +113,7 @@ def check_system():
 
     preparing_label = ctk.CTkLabel(preparing_frame,
                                    text=get_text(0),
-                                   font=('Calibri', 22))
+                                   font=('Segoe UI', 22))
     preparing_label.pack()
 
     preparing_progressbar = ctk.CTkProgressBar(preparing_frame,
@@ -142,7 +140,7 @@ def check_system2():
 
     # 2. Check internet connection
     try:
-        requests.get('https://google.com/')
+        requests.get('http://example.org')
     except Exception:
         issues.append({'type': 'critical',
                        'message': 'no_internet_connection'})
@@ -191,17 +189,17 @@ def check_system2():
     if len(issues) == 0:
         check_system_label = ctk.CTkLabel(check_system_frame,
                                           text=get_text(1),
-                                          font=('Calibri', 22),
+                                          font=('Segoe UI', 22),
                                           text_color='green')
     elif 'critical' not in [issue['type'] for issue in issues]:
         check_system_label = ctk.CTkLabel(check_system_frame,
                                           text=get_text(2),
-                                          font=('Calibri', 22),
+                                          font=('Segoe UI', 22),
                                           text_color='orange')
     else:
         check_system_label = ctk.CTkLabel(check_system_frame,
                                           text=get_text(3),
-                                          font=('Calibri', 22),
+                                          font=('Segoe UI', 22),
                                           text_color='red')
     check_system_label.pack()
 
@@ -277,7 +275,7 @@ def check_for_winget_packages_updates():
 
     checking_label = ctk.CTkLabel(checking_updates_frame,
                                   text=get_text(13),
-                                  font=('Calibri', 22))
+                                  font=('Segoe UI', 22))
     checking_label.pack()
 
     checking_progressbar = ctk.CTkProgressBar(checking_updates_frame,
@@ -293,8 +291,7 @@ def check_for_winget_packages_updates():
 
 
 def check_updates():
-    global available_updates_frame, \
-        available_updates
+    global available_updates_frame, available_updates
 
     s = subprocess.run('winget upgrade',
                        stdout=subprocess.PIPE,
@@ -410,7 +407,7 @@ def install_updates():
 
             if 'Successfully installed' in output:
                 available_updates[i]['status'] = 'success'
-            elif 'Installer failed with exit code: 3010' in output:
+            elif 'code: 3010' in output:
                 available_updates[i]['status'] = 'reboot_required'
             else:
                 available_updates[i]['status'] = 'error'
@@ -533,12 +530,11 @@ def install_updates():
 
 
 def reboot():
-    os.system('shutdown -r -t 0')
+    os.system('shutdown.exe -r -t 0')
 
 
 def main():
-    global language, \
-        window, home_frame
+    global language, window, home_frame
 
     windll = ctypes.windll.kernel32
     language = locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -556,12 +552,12 @@ def main():
 
     title_label = ctk.CTkLabel(home_frame,
                                text=f'Software Updater {VERSION}',
-                               font=('Calibri', 30))
+                               font=('Segoe UI', 30))
     title_label.pack()
 
     start_button = ctk.CTkButton(home_frame,
                                  text='Start',
-                                 font=('Calibri', 24),
+                                 font=('Segoe UI', 24),
                                  command=check_system)
     start_button.pack(anchor='se', pady=14)
 
